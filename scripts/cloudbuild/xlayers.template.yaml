@@ -55,6 +55,6 @@ spec:
     spec:
       containers:
         - name: xlayers
-          image: gcr.io/cross-xlayers/xlayers:_SHORT_SHA_
+          image: gcr.io/pifro-train/xlayers:_SHORT_SHA_
           ports:
           - containerPort: 80
