@@ -32,7 +32,7 @@ steps:
     id: 'Push deployable image (latest tag)'
     args: ['push', 'gcr.io/$PROJECT_ID/xlayers:latest']
 
-# Patch a new Ingress ressource for the build $SHORT_SHA
+# Patch a new Ingress ressource for the build $SHORT_SHA kaponk
 
   - name: 'google/cloud-sdk:slim'
     id: 'Generate a new Ingress Ressource, Service and Deployment'
