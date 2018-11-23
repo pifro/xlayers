@@ -31,6 +31,28 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Push deployable image (latest tag)'
     args: ['push', 'gcr.io/$PROJECT_ID/xlayers:latest']
+
+# Patch a new Ingress ressource for the build $SHORT_SHA
+
+  - name: 'google/cloud-sdk:slim'
+    id: 'Generate a new Ingress Ressource, Service and Deployment'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        perl -pe "s/_SHORT_SHA_/$SHORT_SHA/g" scripts/cloudbuild/xlayers.template.yaml > xlayers.$SHORT_SHA.yaml
+  # Apply a new Ingress ressource for the build $SHORT_SHA
+
+  - name: 'gcr.io/cloud-builders/kubectl'
+    id: 'Apply Kubectl configuration'
+    args:
+      - 'apply'
+      - '-f'
+      - 'xlayers.$SHORT_SHA.yaml'
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=your-first-cluster-1'
+
 images:
   - 'gcr.io/$PROJECT_ID/xlayers:$SHORT_SHA'
   - 'gcr.io/$PROJECT_ID/xlayers:latest'
